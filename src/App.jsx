@@ -1,5 +1,5 @@
 // src/App.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Catalog from './pages/catalog';
 
@@ -10,7 +10,18 @@ const booksData = [
 ];
 
 function App() {
-  const addToCart = (book) => console.log('Добавлено:', book);
+  const [cart, setCart] = useState([]); // Стейт корзины
+
+  const addToCart = (book) => {
+    const existingBook = cart.find(item => item.id === book.id);
+    if (existingBook) {
+      setCart(cart.map(item => 
+        item.id === book.id ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      setCart([...cart, { ...book, quantity: 1 }]);
+    }
+  };
 
   return (
     <BrowserRouter>
